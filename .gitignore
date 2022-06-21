@@ -8,7 +8,7 @@ target/
 .apt_generated
 .classpath
 .factorypath
-.project
+.projecgit remote add origin git@github.com:rookie-YIFAN/community_RK.gitt
 .settings
 .springBeans
 .sts4-cache
