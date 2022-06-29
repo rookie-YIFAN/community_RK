@@ -1,7 +1,6 @@
 package com.rookie.controller;
 
-import com.rookie.Service.StudentService;
-import org.apache.dubbo.config.annotation.DubboReference;
+import com.rookie.service.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

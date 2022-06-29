@@ -1,6 +1,6 @@
-package com.rookie.Service.impl;
+package com.rookie.service.impl;
 
-import com.rookie.Service.StudentService;
+import com.rookie.service.StudentService;
 import com.rookie.mapper.StudentMapper;
 import com.rookie.model.Student;
 import org.springframework.stereotype.Service;

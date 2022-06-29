@@ -1,9 +1,8 @@
 package com.rookie.provider;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rookie.dto.AccessTokenDTO;
-import com.rookie.dto.GiteeUser;
+import com.rookie.model.GiteeUser;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -53,6 +52,8 @@ public class GiteeProvider {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
+
+            System.out.println(string);
             GiteeUser giteeUser = parseObject(string, GiteeUser.class);
             return giteeUser;
         } catch (Exception e) {

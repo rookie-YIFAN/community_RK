@@ -1,4 +1,4 @@
-package com.rookie.Service;
+package com.rookie.service;
 
 import com.rookie.model.Student;
 

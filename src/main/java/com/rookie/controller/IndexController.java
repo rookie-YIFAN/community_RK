@@ -1,17 +1,92 @@
 package com.rookie.controller;
 
+import com.rookie.dto.QuestionDTO;
+import com.rookie.model.Question;
+import com.rookie.mapper.QuestionMapper;
+import com.rookie.mapper.UserMapper;
+import com.rookie.model.User;
+import com.rookie.service.QuestionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.support.SessionStatus;
+
+import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class IndexController {
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private QuestionMapper questionMapper;
+
+    @Resource
+    private QuestionService questionService;
+
     @GetMapping("/")
-    public String index(){
+    public String index(HttpServletRequest request,
+                        Model model){
+        Cookie[] cookies = request.getCookies();
+        boolean flag = true;
+        if (cookies == null) return "index";
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")){
+                System.out.println("cookie "+ cookie);
+                String token = cookie.getValue();
+                User user = userMapper.getByToken(token);
+                if (user != null) request.getSession().setAttribute("user", user);
+                flag = false;
+                break;
+            }
+        }
+        if (flag) request.getSession().removeAttribute("user");
+        List<QuestionDTO> questionList = questionService.get();
+        model.addAttribute("questions", questionList);
         return "index";
     }
 
     @GetMapping("/index")
-    public String indexPage(){
+    public String indexPage(HttpServletRequest request,
+                            Model model){
+        Cookie[] cookies = request.getCookies();
+        boolean flag = true;
+        if (cookies == null) return "index";
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")){
+                System.out.println("cookie "+ cookie);
+                String token = cookie.getValue();
+                User user = userMapper.getByToken(token);
+                if (user != null) request.getSession().setAttribute("user", user);
+                flag = false;
+                break;
+            }
+        }
+        if (flag) request.getSession().removeAttribute("user");
+        List<QuestionDTO> questionList = questionService.get();
+        model.addAttribute("questions", questionList);
         return "index";
+
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpSession session,
+                         SessionStatus sessionStatus){
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return "index";
+        for (Cookie cookie : cookies) {
+            cookie.setMaxAge(0);
+        }
+        System.out.println("session " + session.getAttribute("user"));
+        session.removeAttribute("user");
+        session.invalidate();  //然后是让httpsession失效
+        sessionStatus.setComplete();//最后是调用sessionStatus方法
+        return "index";
+
     }
 }
