@@ -129,9 +129,9 @@ public class AuthController {
             response.addCookie(cookie);
 
 
-            return "redirect:/index";
+            return "redirect:/";
         }else{
-            return "redirect:/index";
+            return "redirect:/";
         }
 
     }

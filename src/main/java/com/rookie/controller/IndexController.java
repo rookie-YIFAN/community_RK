@@ -1,5 +1,6 @@
 package com.rookie.controller;
 
+import com.rookie.dto.PaginationDTO;
 import com.rookie.dto.QuestionDTO;
 import com.rookie.model.Question;
 import com.rookie.mapper.QuestionMapper;
@@ -9,6 +10,7 @@ import com.rookie.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.annotation.Resource;
@@ -30,7 +32,9 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name="page", defaultValue = "1") Integer page,
+                        @RequestParam(name="value", defaultValue = "5") Integer size){
         Cookie[] cookies = request.getCookies();
         boolean flag = true;
         if (cookies == null) return "index";
@@ -40,22 +44,25 @@ public class IndexController {
                 String token = cookie.getValue();
                 User user = userMapper.getByToken(token);
                 if (user != null) request.getSession().setAttribute("user", user);
+                System.out.println(user);
                 flag = false;
                 break;
             }
         }
         if (flag) request.getSession().removeAttribute("user");
-        List<QuestionDTO> questionList = questionService.get();
-        model.addAttribute("questions", questionList);
+        PaginationDTO pagination = questionService.get(page, size);
+        model.addAttribute("pagination", pagination);
         return "index";
     }
 
     @GetMapping("/index")
     public String indexPage(HttpServletRequest request,
-                            Model model){
+                            Model model,
+                            @RequestParam(name="page", defaultValue = "1") Integer page,
+                            @RequestParam(name="value", defaultValue = "5") Integer size){
         Cookie[] cookies = request.getCookies();
         boolean flag = true;
-        if (cookies == null) return "index";
+        if (cookies == null) return "index1";
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")){
                 System.out.println("cookie "+ cookie);
@@ -67,16 +74,18 @@ public class IndexController {
             }
         }
         if (flag) request.getSession().removeAttribute("user");
-        List<QuestionDTO> questionList = questionService.get();
-        model.addAttribute("questions", questionList);
-        return "index";
+        List<QuestionDTO> QuestionDTO = questionService.getQuestionDTO();
+        System.out.println(QuestionDTO);
+        model.addAttribute("QuestionDTO", QuestionDTO);
+        return "index1";
 
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
                          HttpSession session,
-                         SessionStatus sessionStatus){
+                         SessionStatus sessionStatus,
+                         Model model){
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return "index";
         for (Cookie cookie : cookies) {
@@ -86,6 +95,11 @@ public class IndexController {
         session.removeAttribute("user");
         session.invalidate();  //然后是让httpsession失效
         sessionStatus.setComplete();//最后是调用sessionStatus方法
+        int page = 1;
+        int size = 5;
+        PaginationDTO pagination = questionService.get(page, size);
+        model.addAttribute("pagination", pagination);
+
         return "index";
 
     }

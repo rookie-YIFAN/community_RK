@@ -3,12 +3,12 @@
 <head>
     <title>RK community</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script src="/boot/js/jquery-2.1.4.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="/boot/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/boot/css/bootstrap-theme.min.css" />
-    <link rel="stylesheet" href="/boot/css/community.css" />
+    <script src="/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="/css/community.css" />
 
-    <script src="/boot/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <!--
         <script src="js/bootstrap.min.js" type="application/javascript"/>
         这样写不会显示内容
@@ -16,9 +16,9 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-default">
+<!--    <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
+            &lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">RK Community</span>
@@ -26,7 +26,7 @@
                 <a class="navbar-brand" href="/boot">RK Community</a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
+            &lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
@@ -45,18 +45,19 @@
                             <li><a href="#">消息中心</a></li>
                             <li><a href="#">个人资料</a></li>
                             <li><a href="logout">退出登录</a></li>
-                            <!--<li role="separator" class="divider"></li>-->
-                            <!--<li><a href="#">Separated link</a></li>-->
+                            &lt;!&ndash;<li role="separator" class="divider"></li>&ndash;&gt;
+                            &lt;!&ndash;<li><a href="#">Separated link</a></li>&ndash;&gt;
                         </ul>
                     </li>
-                    <li th:unless="${session.user}"><a href="https://gitee.com/oauth/authorize?client_id=33d0627c61a1354614b12e3a15a7f3dbee84729dbbfac6eb5dbb43caf77d3e52&redirect_uri=http://localhost:468/boot/callback/gitee&response_type=code">Gitee登录</a></li>
-                    <li th:unless="${session.user}"><a href="https://github.com/login/oauth/authorize?client_id=da485d96fe0db44b815e&redirect_uri=http://localhost:468/boot/callback&scope=user&state=1">Github登录</a></li>
+                    <li th:unless="${session.user}"><a href="https://gitee.com/oauth/authorize?client_id=33d0627c61a1354614b12e3a15a7f3dbee84729dbbfac6eb5dbb43caf77d3e52&redirect_uri=http://localhost:468/callback/gitee&response_type=code">Gitee登录</a></li>
+                    <li th:unless="${session.user}"><a href="https://github.com/login/oauth/authorize?client_id=da485d96fe0db44b815e&redirect_uri=http://localhost:468/callback&scope=user&state=1">Github登录</a></li>
 
 
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav>-->
+    <div th:insert="header :: nav"></div>
     <div class="container-fluid main">
         <div class="row">
             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
@@ -79,7 +80,7 @@
                     </li>
                 </ul>-->
 
-                <div class="media" th:each="question : ${questions}">
+                <div class="media" th:each="question : ${pagination.data}">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
@@ -98,7 +99,7 @@
                         </span>
                     </div>
                 </div>
-                <!--<nav aria-label="Page navigation">
+                <nav aria-label="Page navigation">
                     <ul class="pagination">
                         <li th:if="${pagination.showFirstPage}">
                             <a th:href="@{/(page=1,search=${search},tag=${tag},sort=${sort})}" aria-label="Previous">
@@ -129,10 +130,10 @@
                             </a>
                         </li>
                     </ul>
-                </nav>-->
+                </nav>
             </div>
             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                <div >topic</div>
+                <h3> 热门话题 </h3>
                 <!--相关问题-->
                 <!--<hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
                 <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
