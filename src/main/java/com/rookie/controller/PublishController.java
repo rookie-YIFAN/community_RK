@@ -41,21 +41,24 @@ public class PublishController {
 
 
         // 查看登录状态
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) return "publish";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")){
-                user =  userMapper.getByToken(cookie.getValue());
-                request.getSession().setAttribute("user",user);
-                break;
-            }
-        }
+        //User user = null;
+        //Cookie[] cookies = request.getCookies();
+        //if (cookies == null) return "publish";
+        //for (Cookie cookie : cookies) {
+        //    if (cookie.getName().equals("token")){
+        //        user =  userMapper.getByToken(cookie.getValue());
+        //        request.getSession().setAttribute("user",user);
+        //        break;
+        //    }
+        //}
+        User user = (User) request.getSession().getAttribute("user");
+        //if (user == null) return "index";
         if (user == null) {
             System.out.println("user == null !");
             model.addAttribute("msg", "error: 用户未登录");
             return "publish";
         }
+
         // 若已登录
         Question question = new Question();
         question.setTitle(title);

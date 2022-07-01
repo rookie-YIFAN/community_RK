@@ -25,4 +25,7 @@ public interface QuestionMapper {
 
     @Select("select * from question where creator = #{id} limit #{page}, #{size}")
     List<Question> getByContidition(Integer id, Integer page, Integer size);
+
+    @Select("select * from question where id = #{id}")
+    Question getById(Integer id);
 }

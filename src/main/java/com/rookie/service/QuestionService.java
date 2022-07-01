@@ -86,8 +86,8 @@ public class QuestionService {
         return questionDTOS;
     }
 
-    public PaginationDTO getQuestionDTOByCondition(Integer id, Integer page, Integer size) {
-        List<Question> questionList = questionMapper.getByContidition(id, 0, 5);
+    public PaginationDTO getQuestionDTOByCondition(Integer id, Integer offset, Integer size) {
+        List<Question> questionList = questionMapper.getByContidition(id, offset, size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for(Question question : questionList){
@@ -107,5 +107,14 @@ public class QuestionService {
 
 
         return paginationDTO;
+    }
+
+    public QuestionDTO getById(Integer id){
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.getById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }

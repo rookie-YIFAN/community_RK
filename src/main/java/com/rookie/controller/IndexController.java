@@ -35,23 +35,28 @@ public class IndexController {
                         Model model,
                         @RequestParam(name="page", defaultValue = "1") Integer page,
                         @RequestParam(name="value", defaultValue = "5") Integer size){
-        Cookie[] cookies = request.getCookies();
-        boolean flag = true;
-        if (cookies == null) return "index";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")){
-                System.out.println("cookie "+ cookie);
-                String token = cookie.getValue();
-                User user = userMapper.getByToken(token);
-                if (user != null) request.getSession().setAttribute("user", user);
-                System.out.println(user);
-                flag = false;
-                break;
-            }
-        }
-        if (flag) request.getSession().removeAttribute("user");
+        //Cookie[] cookies = request.getCookies();
+        //boolean flag = true;
+        //if (cookies == null) return "index";
+        //for (Cookie cookie : cookies) {
+        //    if (cookie.getName().equals("token")){
+        //        System.out.println("cookie "+ cookie);
+        //        String token = cookie.getValue();
+        //        User user = userMapper.getByToken(token);
+        //        if (user != null) request.getSession().setAttribute("user", user);
+        //        System.out.println(user);
+        //        flag = false;
+        //        break;
+        //    }
+        //}
+        //if (flag) request.getSession().removeAttribute("user");
+
+        //User user = (User) request.getSession().getAttribute("user");
+        //if (user == null) return "index";
+
         PaginationDTO pagination = questionService.get(page, size);
         model.addAttribute("pagination", pagination);
+
         return "index";
     }
 
@@ -60,20 +65,24 @@ public class IndexController {
                             Model model,
                             @RequestParam(name="page", defaultValue = "1") Integer page,
                             @RequestParam(name="value", defaultValue = "5") Integer size){
-        Cookie[] cookies = request.getCookies();
-        boolean flag = true;
-        if (cookies == null) return "index1";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")){
-                System.out.println("cookie "+ cookie);
-                String token = cookie.getValue();
-                User user = userMapper.getByToken(token);
-                if (user != null) request.getSession().setAttribute("user", user);
-                flag = false;
-                break;
-            }
-        }
-        if (flag) request.getSession().removeAttribute("user");
+        //Cookie[] cookies = request.getCookies();
+        //boolean flag = true;
+        //if (cookies == null) return "index1";
+        //for (Cookie cookie : cookies) {
+        //    if (cookie.getName().equals("token")){
+        //        System.out.println("cookie "+ cookie);
+        //        String token = cookie.getValue();
+        //        User user = userMapper.getByToken(token);
+        //        if (user != null) request.getSession().setAttribute("user", user);
+        //        flag = false;
+        //        break;
+        //    }
+        //}
+        //if (flag) request.getSession().removeAttribute("user");
+
+        //User user = (User) request.getSession().getAttribute("user");
+        //if (user == null) return "index";
+
         List<QuestionDTO> QuestionDTO = questionService.getQuestionDTO();
         System.out.println(QuestionDTO);
         model.addAttribute("QuestionDTO", QuestionDTO);
@@ -94,13 +103,14 @@ public class IndexController {
         System.out.println("session " + session.getAttribute("user"));
         session.removeAttribute("user");
         session.invalidate();  //然后是让httpsession失效
-        sessionStatus.setComplete();//最后是调用sessionStatus方法
+        sessionStatus.setComplete(); //最后是调用sessionStatus方法
+
         int page = 1;
         int size = 5;
-        PaginationDTO pagination = questionService.get(page, size);
-        model.addAttribute("pagination", pagination);
+
+        // PaginationDTO pagination = questionService.get(page, size);
+        // model.addAttribute("pagination", pagination);
 
         return "index";
-
     }
 }
