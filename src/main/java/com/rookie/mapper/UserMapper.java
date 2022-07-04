@@ -5,6 +5,7 @@ import com.rookie.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -25,4 +26,11 @@ public interface UserMapper {
 
     @Select("select * from user where id = #{id}")
     User getById(Integer id);
+
+    @Select("select * from user where account_id = #{accountId}")
+    User getByAccId(String accountId);
+
+    @Update("update user set name= #{name}, token = #{token}, " +
+            "gmt_modified = #{gmtModified}, avatar_url = #{avatarUrl}")
+    int update(User user);
 }

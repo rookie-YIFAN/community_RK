@@ -7,6 +7,7 @@ import com.rookie.mapper.UserMapper;
 import com.rookie.model.User;
 import com.rookie.provider.GiteeProvider;
 import com.rookie.provider.GithubProvider;
+import com.rookie.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,8 @@ public class AuthController {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(
@@ -97,17 +100,22 @@ public class AuthController {
 
         if(giteeUser!=null){
             // 登陆成功
-            User user = new User();
 
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setName(giteeUser.getName());
-            user.setAccountId(String.valueOf(giteeUser.getId()));
-            user.setGmtCreat(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreat());
-            user.setSource("gitee");
-            user.setAvatarUrl(giteeUser.getAvatarUrl());
-            userMapper.insert(user);
+            String accountId = String.valueOf(giteeUser.getId());
+
+            User user = userService.createOrUpdate(accountId, giteeUser);
+
+            //String token = UUID.randomUUID().toString();
+            //user.setToken(token);
+            //user.setName(giteeUser.getName());
+            //user.setAccountId(String.valueOf(giteeUser.getId()));
+            //user.setGmtCreat(System.currentTimeMillis());
+            //user.setGmtModified(user.getGmtCreat());
+            //user.setSource("gitee");
+            //user.setAvatarUrl(giteeUser.getAvatarUrl());
+
+
+
 
 
             System.out.println(user);
@@ -123,7 +131,7 @@ public class AuthController {
             }
 
 
-            Cookie cookie = new Cookie("token", token);
+            Cookie cookie = new Cookie("token", user.getToken());
             cookie.setDomain("localhost");
             cookie.setPath("/");
             response.addCookie(cookie);

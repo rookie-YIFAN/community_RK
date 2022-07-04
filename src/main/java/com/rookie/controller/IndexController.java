@@ -7,6 +7,7 @@ import com.rookie.mapper.QuestionMapper;
 import com.rookie.mapper.UserMapper;
 import com.rookie.model.User;
 import com.rookie.service.QuestionService;
+import okhttp3.Response;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class IndexController {
 
         //User user = (User) request.getSession().getAttribute("user");
         //if (user == null) return "index";
-
+        System.out.println("-----------------------------------------------------------------------------");
         PaginationDTO pagination = questionService.get(page, size);
         model.addAttribute("pagination", pagination);
 
@@ -92,25 +94,30 @@ public class IndexController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
+                         HttpServletResponse response,
                          HttpSession session,
                          SessionStatus sessionStatus,
                          Model model){
         Cookie[] cookies = request.getCookies();
-        if (cookies == null) return "index";
-        for (Cookie cookie : cookies) {
-            cookie.setMaxAge(0);
-        }
-        System.out.println("session " + session.getAttribute("user"));
-        session.removeAttribute("user");
-        session.invalidate();  //然后是让httpsession失效
-        sessionStatus.setComplete(); //最后是调用sessionStatus方法
+        if (cookies == null) return "redirect:/";
+        //for (Cookie cookie : cookies) {
+        //    cookie.setMaxAge(0);
+        //}
 
-        int page = 1;
-        int size = 5;
+        Cookie token = new Cookie("token", "");
+        Cookie JSESSIONID = new Cookie("JSESSIONID", "");
+
+        token.setMaxAge(0);
+        JSESSIONID.setMaxAge(0);
+
+        response.addCookie(token);
+        response.addCookie(JSESSIONID);
+
+
 
         // PaginationDTO pagination = questionService.get(page, size);
         // model.addAttribute("pagination", pagination);
 
-        return "index";
+        return "redirect:/";
     }
 }

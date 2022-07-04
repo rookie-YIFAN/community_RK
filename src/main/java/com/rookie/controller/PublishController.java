@@ -4,14 +4,15 @@ import com.rookie.model.Question;
 import com.rookie.mapper.QuestionMapper;
 import com.rookie.mapper.UserMapper;
 import com.rookie.model.User;
+import com.rookie.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -20,7 +21,33 @@ public class PublishController {
     private QuestionMapper questionMapper;
 
     @Resource
+    private QuestionService questionService;
+
+    @Resource
     private UserMapper userMapper;
+
+    @GetMapping("/publish/{id}")
+    public String question(@PathVariable(name = "id") String id, Model model) {
+        //Long questionId = null;
+        //try {
+        //    questionId = Long.parseLong(id);
+        //} catch (NumberFormatException e) {
+        //    throw new CustomizeException(CustomizeErrorCode.INVALID_INPUT);
+        //}
+        //QuestionDTO questionDTO = questionService.getById(questionId);
+        //List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);
+        //List<CommentDTO> comments = commentService.listByTargetId(questionId, CommentTypeEnum.QUESTION);
+        //累加阅读数
+        //questionService.incView(questionId);
+        Question question = questionMapper.selectByPrimaryKey(Integer.parseInt(id));
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", Integer.parseInt(id));
+
+        return "publish";
+    }
+
 
     @GetMapping("/publish")
     public String publish(){
@@ -29,9 +56,10 @@ public class PublishController {
 
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "description" , required = false) String description,
+            @RequestParam(value = "tag" , required = false) String tag,
+            @RequestParam(value = "id" , required = false) Integer id,
             HttpServletRequest request,
             Model model
     ){
@@ -54,7 +82,7 @@ public class PublishController {
         User user = (User) request.getSession().getAttribute("user");
         //if (user == null) return "index";
         if (user == null) {
-            System.out.println("user == null !");
+            System.out.println("user == null!");
             model.addAttribute("msg", "error: 用户未登录");
             return "publish";
         }
@@ -65,10 +93,9 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-
-        questionMapper.create(question);
-        return "redirect:/publish";
+        question.setId(id);
+        questionService.createOrUpdate(question);
+        //questionMapper.create(question);
+        return "redirect:/";
     }
 }

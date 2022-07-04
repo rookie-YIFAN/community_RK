@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@SpringBootApplication(exclude=DataSourceAutoConfiguration.class)
 @EnableTransactionManagement
 @EnableDubbo
-//@MapperScan(value = "com.rookie.mapper")
+@MapperScan(value = "com.rookie.mapper")
 @SpringBootApplication
 @ServletComponentScan
 public class SpringbootProjApplication {
