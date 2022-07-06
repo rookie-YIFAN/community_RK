@@ -49,6 +49,29 @@
             </div>
         </div>
     </nav>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="margin-top: 200px;width: 300px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">登录 注册</h4>
+                </div>
+                <div class="modal-body" style="text-align:center">
+                    <a href="https://gitee.com/oauth/authorize?client_id=33d0627c61a1354614b12e3a15a7f3dbee84729dbbfac6eb5dbb43caf77d3e52&redirect_uri=http://localhost:468/callback/gitee&response_type=code">
+                        <img src="/images/gitee.png">
+                    </a>
+                    <a href="@{https://github.com/login/oauth/authorize(client_id='7f316909bf70d1eaa2b2',redirect_uri=${#httpServletRequest.getServletContext().getAttribute('githubRedirectUri')},scope='user',state=1)}">
+                        <img src="/images/github.png">
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

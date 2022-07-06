@@ -3,7 +3,7 @@ package com.rookie.controller;
 import com.rookie.dto.AccessTokenDTO;
 import com.rookie.model.GiteeUser;
 import com.rookie.model.GithubUser;
-import com.rookie.mapper.UserMapper;
+import com.rookie.mapper.UserExtMapper;
 import com.rookie.model.User;
 import com.rookie.provider.GiteeProvider;
 import com.rookie.provider.GithubProvider;
@@ -37,7 +37,7 @@ public class AuthController {
     private String redirectUri;
 
     @Resource
-    private UserMapper userMapper;
+    private UserExtMapper userExtMapper;
 
     @Resource
     private UserService userService;
@@ -73,7 +73,7 @@ public class AuthController {
             user.setGmtModified(user.getGmtCreat());
             user.setSource("github");
 
-            userMapper.insert(user);
+            userExtMapper.insert(user);
             //request.getSession().setAttribute("user", user);
             Cookie cookie = new Cookie("token", token1);
             cookie.setDomain("localhost");

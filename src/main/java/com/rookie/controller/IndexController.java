@@ -2,12 +2,9 @@ package com.rookie.controller;
 
 import com.rookie.dto.PaginationDTO;
 import com.rookie.dto.QuestionDTO;
-import com.rookie.model.Question;
 import com.rookie.mapper.QuestionMapper;
-import com.rookie.mapper.UserMapper;
-import com.rookie.model.User;
+import com.rookie.mapper.UserExtMapper;
 import com.rookie.service.QuestionService;
-import okhttp3.Response;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +21,7 @@ import java.util.List;
 @Controller
 public class IndexController {
     @Resource
-    private UserMapper userMapper;
+    private UserExtMapper userExtMapper;
 
     @Resource
     private QuestionMapper questionMapper;

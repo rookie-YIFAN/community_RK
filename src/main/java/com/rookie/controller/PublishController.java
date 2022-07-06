@@ -2,7 +2,7 @@ package com.rookie.controller;
 
 import com.rookie.model.Question;
 import com.rookie.mapper.QuestionMapper;
-import com.rookie.mapper.UserMapper;
+import com.rookie.mapper.UserExtMapper;
 import com.rookie.model.User;
 import com.rookie.service.QuestionService;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class PublishController {
     private QuestionService questionService;
 
     @Resource
-    private UserMapper userMapper;
+    private UserExtMapper userExtMapper;
 
     @GetMapping("/publish/{id}")
     public String question(@PathVariable(name = "id") String id, Model model) {

@@ -7,11 +7,9 @@ import com.rookie.exception.CustomizeException;
 import com.rookie.exception.EnumErrorCode;
 import com.rookie.mapper.QuestionExtMapper;
 import com.rookie.mapper.QuestionMapper;
-import com.rookie.mapper.UserMapper;
+import com.rookie.mapper.UserExtMapper;
 import com.rookie.model.Question;
-import com.rookie.model.QuestionExample;
 import com.rookie.model.User;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ import java.util.List;
 public class QuestionService {
 
     @Resource
-    private UserMapper userMapper;
+    private UserExtMapper userExtMapper;
 
     @Resource
     private QuestionMapper questionMapper;
@@ -77,7 +75,7 @@ public class QuestionService {
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for(Question question : questionList){
-            User user = userMapper.getById(question.getCreator());
+            User user = userExtMapper.getById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -118,7 +116,7 @@ public class QuestionService {
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for(Question question : questionList){
-            User user = userMapper.getById(question.getCreator());
+            User user = userExtMapper.getById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -140,7 +138,7 @@ public class QuestionService {
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
         for(Question question : questionList){
-            User user = userMapper.getById(question.getCreator());
+            User user = userExtMapper.getById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -165,7 +163,7 @@ public class QuestionService {
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.getById(question.getCreator());
+        User user = userExtMapper.getById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }

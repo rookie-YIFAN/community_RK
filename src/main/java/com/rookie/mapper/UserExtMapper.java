@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
-public interface UserMapper {
+public interface UserExtMapper {
     //
     //private Integer id;
     //private String name;
