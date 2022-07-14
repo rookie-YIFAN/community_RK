@@ -197,7 +197,12 @@
                     <verbose>true</verbose>
                 </configuration>
             </plugin>
-
+            <!--在这里修改版本-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <!--<version></version>-->
+            </plugin>
 
 
         </plugins>
