@@ -1,10 +1,13 @@
 package com.rookie.controller;
 
+import com.rookie.cache.TagCache;
 import com.rookie.model.Question;
 import com.rookie.mapper.QuestionMapper;
 import com.rookie.mapper.UserExtMapper;
 import com.rookie.model.User;
+import com.rookie.model.UserExt;
 import com.rookie.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,13 +47,16 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", Integer.parseInt(id));
-
+        model.addAttribute("tags", TagCache.get());
+        System.out.println(TagCache.get());
         return "publish";
     }
 
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("tags", TagCache.get());
+
         return "publish";
     }
 
@@ -66,6 +72,7 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tags", TagCache.get());
 
 
         // 查看登录状态
@@ -81,9 +88,27 @@ public class PublishController {
         //}
         User user = (User) request.getSession().getAttribute("user");
         //if (user == null) return "index";
-        if (user == null) {
-            System.out.println("user == null!");
-            model.addAttribute("msg", "error: 用户未登录");
+        if (StringUtils.isBlank(title)) {
+            model.addAttribute("msg", "标题不能为空");
+            return "publish";
+        }
+
+        if (StringUtils.length(title) > 50) {
+            model.addAttribute("msg", "标题最多 50 个字符");
+            return "publish";
+        }
+        if (StringUtils.isBlank(description)) {
+            model.addAttribute("msg", "问题补充不能为空");
+            return "publish";
+        }
+        if (StringUtils.isBlank(tag)) {
+            model.addAttribute("msg", "标签不能为空");
+            return "publish";
+        }
+
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            model.addAttribute("msg", "输入非法标签:" + invalid);
             return "publish";
         }
 

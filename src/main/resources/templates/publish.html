@@ -7,7 +7,15 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
     <link rel="stylesheet" href="/css/community.css" />
+    <link rel="stylesheet" href="/css/editormd.min.css">
+    <link rel="stylesheet" href="/css/editormd.preview.min.css">
+
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+    <script src="/js/editormd.min.js" type="application/javascript"></script>
+    <script src="/js/moment.js" type="application/javascript"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
     <!--
         <script src="js/bootstrap.min.js" type="application/javascript"/>
         这样写不会显示内容
@@ -15,49 +23,7 @@
 
 </head>
 <body>
-<!--    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            &lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">RK Community</span>
-                </button>
-                <a class="navbar-brand" href="">RK Community</a>
-            </div>
 
-            &lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="内容搜索">
-                    </div>
-                    <button type="submit" class="btn btn-default">搜索</button>
-                </form>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li th:if="${session.user != null}">
-                        <a href="/publish">提问</a>
-                    </li>
-                    <li class="dropdown" th:if="${session.user}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><p th:text="${session.user.name}"></p><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">消息中心</a></li>
-                            <li><a href="#">个人资料</a></li>
-                            <li><a href="logout">退出登录</a></li>
-                            &lt;!&ndash;<li role="separator" class="divider"></li>&ndash;&gt;
-                            &lt;!&ndash;<li><a href="#">Separated link</a></li>&ndash;&gt;
-                        </ul>
-                    </li>
-                    <li th:unless="${session.user}"><a href="https://gitee.com/oauth/authorize?client_id=33d0627c61a1354614b12e3a15a7f3dbee84729dbbfac6eb5dbb43caf77d3e52&redirect_uri=http://localhost:468/boot/callback/gitee&response_type=code">Gitee登录</a></li>
-                    <li th:unless="${session.user}"><a href="https://github.com/login/oauth/authorize?client_id=da485d96fe0db44b815e&redirect_uri=http://localhost:468/boot/callback&scope=user&state=1">Github登录</a></li>
-
-
-                </ul>
-            </div>
-        </div>
-
-
-    </nav>-->
     <div th:insert="header :: nav"></div>
     <div class="container-fluid main">
         <div class="row">
@@ -69,30 +35,59 @@
                     <input type="hidden" name="id" th:value="${id}">
                     <div class="form-group">
                         <label for="title">问题标题（简单扼要）:</label>
-                        <input type="text" class="form-control" th:value="${title}"  id="title" name="title" placeholder="问题标题……">
+                        <input type="text" class="form-control" th:value="${title}" autocomplete="false"  id="title" name="title" placeholder="问题标题……">
                     </div>
                     <div class="form-group" id="question-editor" style="z-index: 2">
                         <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                        <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
+                        <textarea name="description" id="description" th:text="${description}" style="display:none;"
+                                  class="form-control"
+                                  cols="30"
+                                  rows="10"></textarea>
                     </div>
-                    <!--<script type="text/javascript">-->
-                    <!--    $(function () {-->
-                    <!--        var editor = editormd("question-editor", {-->
-                    <!--            width: "100%",-->
-                    <!--            height: 350,-->
-                    <!--            path: "/js/lib/",-->
-                    <!--            delay: 0,-->
-                    <!--            watch: false,-->
-                    <!--            placeholder: "请输入问题描述",-->
-                    <!--            imageUpload: true,-->
-                    <!--            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],-->
-                    <!--            imageUploadURL: "/file/upload",-->
-                    <!--        });-->
-                    <!--    });-->
-                    <!--</script>-->
+                    <script type="text/javascript">
+                        $(function () {
+                            var editor = editormd("question-editor", {
+                                width: "100%",
+                                height: 350,
+                                path: "/js/lib/",
+                                delay: 0,
+                                watch: false,
+                                placeholder: "请输入问题描述",
+                                imageUpload: true,
+                                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                                imageUploadURL: "/file/upload",
+                            });
+                        });
+                    </script>
                     <div class="form-group">
                         <label for="tag">添加标签:</label>
-                        <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" placeholder="输入标签，以，号分隔">
+                        <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
+                               autocomplete="off"
+                               placeholder="输入标签，以，号分隔"
+                               onclick="showSelectTag()">
+                        <div id="select-tag" class="publish-tag-tab">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
+                                    th:class="${selectCategoryStat.first ? 'active':''}">
+                                    <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
+                                       data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" th:id="${selectCategory.categoryName}"
+                                     th:each="selectCategory: ${tags}"
+                                     th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
+                                <span>
+                                    <span th:each="selectTag: ${selectCategory.tags}">
+                                    <span class="community-tag" onclick="selectTag(this)"
+                                          th:data-tag="${selectTag}"
+                                          th:text="${' '+selectTag}">
+                                    </span>
+                                </span>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="container-fluid main ">
@@ -120,6 +115,6 @@
             </div>
         </div>
     </div>
-
+    <div th:insert="footer :: foot"></div>
 </body>
 </html>

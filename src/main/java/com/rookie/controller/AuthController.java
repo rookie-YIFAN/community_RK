@@ -5,9 +5,11 @@ import com.rookie.model.GiteeUser;
 import com.rookie.model.GithubUser;
 import com.rookie.mapper.UserExtMapper;
 import com.rookie.model.User;
+import com.rookie.model.UserExt;
 import com.rookie.provider.GiteeProvider;
 import com.rookie.provider.GithubProvider;
 import com.rookie.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthController {
     @Resource
     private GithubProvider githubProvider;
@@ -69,9 +72,9 @@ public class AuthController {
             user.setToken(token1);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreat(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreat());
-            user.setSource("github");
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            user.setUserSource("github");
 
             userExtMapper.insert(user);
             //request.getSession().setAttribute("user", user);
@@ -82,6 +85,7 @@ public class AuthController {
             System.out.println(user);
             return "redirect:index";
         }else{
+            log.error("callback get github user, {}", githubUser);
             return "redirect:index";
         }
     }
@@ -139,6 +143,8 @@ public class AuthController {
 
             return "redirect:/";
         }else{
+            log.error("callback get github user, {}", giteeUser);
+
             return "redirect:/";
         }
 

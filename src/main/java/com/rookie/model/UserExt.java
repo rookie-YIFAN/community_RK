@@ -4,7 +4,7 @@ package com.rookie.model;
 import lombok.Data;
 
 @Data
-public class User {
+public class UserExt {
     private Integer id;
     private String name;
     private String accountId;
