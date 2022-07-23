@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 //@SpringBootApplication
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan(value = "com.rookie.mapper")
 @SpringBootApplication
 @ServletComponentScan
+@PropertySource(value={"classpath:application_dev.properties"})
+//application.properties
 public class SpringbootProjApplication {
 
     public static void main(String[] args) {

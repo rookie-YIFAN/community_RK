@@ -7,14 +7,14 @@ import com.rookie.exception.CustomizeException;
 import com.rookie.exception.EnumErrorCode;
 import com.rookie.mapper.QuestionExtMapper;
 import com.rookie.mapper.QuestionMapper;
-import com.rookie.mapper.UserExtMapper;
+
 import com.rookie.mapper.UserMapper;
 import com.rookie.model.Question;
 import com.rookie.model.QuestionExample;
 import com.rookie.model.User;
-import com.rookie.model.UserExt;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +27,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
-
-    @Resource
-    private UserExtMapper userExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -239,6 +236,7 @@ public class QuestionService {
         updateQuestion.setId(id);
         updateQuestion.setViewCount(1);
         questionExtMapper.incView(updateQuestion);
+        System.out.println("questionExtMapper.incView(updateQuestion)");
     }
 
     public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {

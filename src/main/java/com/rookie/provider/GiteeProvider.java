@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.rookie.dto.AccessTokenDTO;
 import com.rookie.model.GiteeUser;
 import org.springframework.beans.factory.annotation.Value;
-import lombok.extern.slf4j.Slf4j;
+//import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import static com.alibaba.fastjson.JSON.*;
 
 @Component
-@Slf4j
+//@Slf4j
 public class GiteeProvider {
     @Value("${gitee.client.id}")
     private String clientId;
@@ -38,7 +38,7 @@ public class GiteeProvider {
             JSONObject jsonObject = parseObject(string);
             return jsonObject.getString("access_token");
         } catch (Exception e) {
-            log.error("getAccessToken error,{}", accessTokenDTO, e);
+            //log.error("getAccessToken error,{}", accessTokenDTO, e);
         }
         return null;
     }
@@ -57,7 +57,8 @@ public class GiteeProvider {
             GiteeUser giteeUser = parseObject(string, GiteeUser.class);
             return giteeUser;
         } catch (Exception e) {
-            log.error("getUser error,{}", accessToken, e);
+            //log.error("getUser error,{}", accessToken, e);
+            System.out.println(e.getMessage());
         }
         return null;
     }

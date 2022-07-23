@@ -16,12 +16,12 @@ public class InterceptorConfig implements WebMvcConfigurer {
     private HandlerInterceptor urlInterceptor = new URLInterceptor();
 
     @Resource
-    private HandlerInterceptor Authinterceptor = new AuthInterceptor();
+    private HandlerInterceptor authInterceptor = new AuthInterceptor();
 
     // 添加拦截器对象 注入容器
     public void addInterceptors(InterceptorRegistry registry){
         //// 创建拦截器对象
-        //HandlerInterceptor interceptor1 = new URLInterceptor();
+        HandlerInterceptor interceptor1 = new URLInterceptor();
 
         // 指定拦截路径
         String[] path1 = {"/**"};
@@ -34,14 +34,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
 
         // 创建拦截器对象
-        //HandlerInterceptor interceptor2 = new AuthInterceptor();
+        HandlerInterceptor interceptor2 = new AuthInterceptor();
 
         // 指定拦截路径
         String[] path2 = {"/**"};
         // 指定不拦截的地址
         //String excludePath;
 
-        registry.addInterceptor(Authinterceptor).addPathPatterns(path2);
+        registry.addInterceptor(authInterceptor).addPathPatterns(path2);
         // .excludePathPatterns(excludePath)
         System.out.println("AuthInterceptor 拦截器被创建");
     }

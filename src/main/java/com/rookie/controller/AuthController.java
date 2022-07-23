@@ -85,7 +85,7 @@ public class AuthController {
             System.out.println(user);
             return "redirect:index";
         }else{
-            log.error("callback get github user, {}", githubUser);
+            //log.error("callback get github user, {}", githubUser);
             return "redirect:index";
         }
     }
@@ -136,14 +136,16 @@ public class AuthController {
 
 
             Cookie cookie = new Cookie("token", user.getToken());
-            cookie.setDomain("localhost");
+            //cookie.setDomain("43.138.201.141");
+            //cookie.setDomain("localhost");
             cookie.setPath("/");
             response.addCookie(cookie);
 
+            System.out.println("SET TOKEN ------------------------------------------------------------");
 
             return "redirect:/";
         }else{
-            log.error("callback get github user, {}", giteeUser);
+            //log.error("callback get github user, {}", giteeUser);
 
             return "redirect:/";
         }
